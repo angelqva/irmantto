@@ -22,6 +22,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf import settings
 from user.urls import user_router, logout_router
+from cliente.urls import cliente_router, equipo_router
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -36,16 +37,17 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 urlpatterns = [
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
-    path('api/', include(user_router.urls)),
     path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/login/', TokenObtainPairView.as_view(), name='token_login'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/', include(logout_router.urls)),
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     # routes api from apps
-    path('api/', include(user_router.urls))
+    path('api/', include(user_router.urls)),
+    path('api/', include(cliente_router.urls)),
+    path('api/', include(equipo_router.urls)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
