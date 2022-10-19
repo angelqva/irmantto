@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'cliente',
     'empresa',
     'trabajador',
-    'tarea'
+    'tarea',
+    'solicitud',
+    'equipo'
 ]
 
 MIDDLEWARE = [
@@ -62,6 +64,7 @@ MIDDLEWARE = [
 ]
 
 AUTH_USER_MODEL = 'user.User'
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [

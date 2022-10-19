@@ -17,3 +17,16 @@ class NestedGenericMixin(viewsets.GenericViewSet):
         if self.request.method.lower() == "get":
             return self.read_serializer_class
         return self.serializer_class
+
+
+ESTADO_CHOICES_SOLICITUD = (
+    ('Pendiente', 'Pendiente'),
+    ('Aprobado', 'Aprobado'),
+    ('Completado', 'Completado')
+)
+
+ESTADO_CHOICES_ORDEN = (
+    ('Pendiente', 'Pendiente'),
+    ('En Proceso', 'En Proceso'),
+    ('Terminado', 'Terminado')
+)
