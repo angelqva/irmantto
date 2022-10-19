@@ -21,7 +21,8 @@ class NestedGenericMixin(viewsets.GenericViewSet):
 
 ESTADO_CHOICES_SOLICITUD = (
     ('Pendiente', 'Pendiente'),
-    ('Aprobado', 'Aprobado'),
+    ('Aprobada', 'Aprobada'),
+    ('Cancelada', 'Cancelada'),
     ('Completado', 'Completado')
 )
 

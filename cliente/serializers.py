@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from user.serializers import User, SimpleUserSerializer
-from .models import Cliente
-from equipo.models import Equipo
+from .models import Cliente, Equipo
 
 
 class EquipoSerializers(serializers.ModelSerializer):

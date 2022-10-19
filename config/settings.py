@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'trabajador',
     'tarea',
     'solicitud',
-    'equipo'
+    'orden'
 ]
 
 MIDDLEWARE = [
