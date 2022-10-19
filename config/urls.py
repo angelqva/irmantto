@@ -10,7 +10,7 @@ Class-based views
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
 Including another URLconf
-    1. Import the include() function: from django.urls import include, path
+    1. Import include function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
@@ -24,6 +24,7 @@ from django.conf import settings
 from user.urls import user_router, logout_router
 from cliente.urls import cliente_router, equipo_router
 from empresa.urls import empresa_router, responsables_router
+from trabajador.urls import trabajador_router
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -51,7 +52,7 @@ urlpatterns = [
     path('api/', include(equipo_router.urls)),
     path('api/', include(empresa_router.urls)),
     path('api/', include(responsables_router.urls)),
-
+    path('api/', include(trabajador_router.urls)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
