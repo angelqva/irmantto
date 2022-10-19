@@ -1,10 +1,9 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from helpers.helper import NestedViewSetMixin
-from user.serializers import UserSerializer
+from user.serializers import UserSerializer, SimpleUserSerializer
 from cliente.serializers import *
 
 
@@ -14,7 +13,7 @@ class ClienteView(NestedViewSetMixin):
     read_serializer_class = ClienteReadSerializer
     permission_classes = (IsAuthenticated,)
 
-    @action(methods=["post"], detail=True, url_path="crear-usuario", serializer_class=ClienteUserSerializer)
+    @action(methods=["post"], detail=True, url_path="crear-usuario", serializer_class=SimpleUserSerializer)
     def crear_usuario(self, request, **kwargs):
         cliente = self.get_object()
         if cliente.usuario is not None:
@@ -29,7 +28,7 @@ class ClienteView(NestedViewSetMixin):
         instance = user_serializer.save()
         cliente.usuario = instance
         cliente.save()
-        return_data = ClienteUserSerializer(instance=instance).data
+        return_data = SimpleUserSerializer(instance=instance).data
         return Response(return_data, status=status.HTTP_201_CREATED)
 
     @action(methods=["delete"], detail=True, url_path="eliminar-usuario")
@@ -55,7 +54,7 @@ class EquipoView(viewsets.ModelViewSet):
             try:
                 cliente = Cliente.objects.get(pk=cliente_id)
             except Cliente.DoesNotExist:
-                raise NotFound('Cliente not found')
+                raise ValidationError({"cliente": [f"cliente_pk:{cliente_id} no esta en la base de datos"]})
             return self.queryset.filter(cliente=cliente)
 
         return self.queryset
