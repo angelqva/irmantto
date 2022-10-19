@@ -25,6 +25,7 @@ from user.urls import user_router, logout_router
 from cliente.urls import cliente_router, equipo_router
 from empresa.urls import empresa_router, responsables_router
 from trabajador.urls import trabajador_router
+from tarea.urls import tarea_router
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -53,6 +54,7 @@ urlpatterns = [
     path('api/', include(empresa_router.urls)),
     path('api/', include(responsables_router.urls)),
     path('api/', include(trabajador_router.urls)),
+    path('api/', include(tarea_router.urls)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
