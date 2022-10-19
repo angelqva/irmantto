@@ -66,3 +66,23 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(validated_data['password'])
         instance.save()
         return instance
+
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'password')
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'password': {'write_only': True},
+        }
+
+
+class MediumUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'name', 'lastname', 'username', 'email', 'password')
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'password': {'write_only': True},
+        }

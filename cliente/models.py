@@ -4,6 +4,10 @@ from user.models import User
 
 
 class Cliente(models.Model):
+    carnet_identidad = models.CharField(unique=True, max_length=11, validators=[
+        RegexValidator(
+            r"^[0-9]*$", "Solo aceptan digitos")
+    ])
     nombre = models.CharField(max_length=255, blank=True)
     apellidos = models.CharField(max_length=255, blank=True)
     direccion = models.TextField(blank=False)
