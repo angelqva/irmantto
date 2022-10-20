@@ -3,8 +3,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from helpers.helper import NestedViewSetMixin
-from user.serializers import UserSerializer, SimpleUserSerializer
+from user.serializers import UserSerializer
 from cliente.serializers import *
+from solicitud.serializers import SolicitudClienteSerializers, Solicitud, SolicitudClienteReadSerializers
 
 
 class ClienteView(NestedViewSetMixin):
@@ -46,6 +47,24 @@ class EquipoView(viewsets.ModelViewSet):
         'cliente'
     )
     serializer_class = EquipoSerializers
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self, *args, **kwargs):
+        cliente_id = self.kwargs.get("cliente_pk")
+        if cliente_id is not None:
+            try:
+                cliente = Cliente.objects.get(pk=cliente_id)
+            except Cliente.DoesNotExist:
+                raise ValidationError({"cliente": [f"cliente_pk:{cliente_id} no esta en la base de datos"]})
+            return self.queryset.filter(cliente=cliente)
+
+        return self.queryset
+
+
+class SolicitudClienteView(NestedViewSetMixin):
+    queryset = Solicitud.objects.all()
+    serializer_class = SolicitudClienteSerializers
+    read_serializer_class = SolicitudClienteReadSerializers
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self, *args, **kwargs):
