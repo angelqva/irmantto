@@ -24,7 +24,14 @@ class SolicitudClienteSerializers(serializers.ModelSerializer):
             cliente = Cliente.objects.get(pk=cliente_id)
         except Cliente.DoesNotExist:
             raise ValidationError({"cliente": [f"cliente_pk:{cliente_id} no esta en la base de datos"]})
-
+        cantidad = Solicitud.objects.filter(fecha_creacion=date.today(), cliente_id=cliente.id).count()
+        if cantidad > 0:
+            raise ValidationError({
+                "fecha_creacion": [
+                    f"Solo esta permitido una solicitud por día",
+                    f"Actualice la solicitud con fecha de creación: {date.today()}"
+                ]
+            })
         validated_data["cliente"] = cliente
         validated_data["jefe_equipo"] = None
         print(validated_data)
@@ -50,3 +57,33 @@ class SolicitudClienteReadSerializers(serializers.ModelSerializer):
         model = Solicitud
         fields = '__all__'
 
+
+class SolicitudSerializer(serializers.ModelSerializer):
+    fecha = serializers.DateField(default=date.today())
+
+    class Meta:
+        model = Solicitud
+        fields = '__all__'
+
+    def create(self, validated_data):
+        cliente = validated_data["cliente"]
+        if cliente is not None:
+            cantidad = Solicitud.objects.filter(fecha_creacion=date.today(), cliente_id=cliente.id).count()
+            if cantidad > 0:
+                raise ValidationError({
+                    "fecha_creacion": [
+                        f"Solo esta permitido una solicitud por día",
+                        f"Actualice la solicitud con fecha de creación: {date.today()}"
+                    ]
+                })
+        return super().create(validated_data)
+
+
+class SolicitudReadSerializer(serializers.ModelSerializer):
+    cliente = ClienteSerializer()
+    equipos = ClienteEquipoSerializer(many=True)
+    jefe_equipo = JefeTrabajadorSerializer()
+
+    class Meta:
+        model = Solicitud
+        fields = '__all__'

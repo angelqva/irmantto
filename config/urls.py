@@ -22,10 +22,12 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf import settings
 from user.urls import user_router, logout_router
-from cliente.urls import cliente_router, equipo_router
-from empresa.urls import empresa_router, responsables_router
+from cliente.urls import cliente_router, cliente_nested_router
+from empresa.urls import empresa_router, empresa_nested_router
 from trabajador.urls import trabajador_router
 from tarea.urls import tarea_router
+from solicitud.urls import solicitud_router
+from orden.urls import orden_router
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -50,11 +52,13 @@ urlpatterns = [
     # routes api from apps
     path('api/', include(user_router.urls)),
     path('api/', include(cliente_router.urls)),
-    path('api/', include(equipo_router.urls)),
+    path('api/', include(cliente_nested_router.urls)),
     path('api/', include(empresa_router.urls)),
-    path('api/', include(responsables_router.urls)),
+    path('api/', include(empresa_nested_router.urls)),
     path('api/', include(trabajador_router.urls)),
     path('api/', include(tarea_router.urls)),
+    path('api/', include(solicitud_router.urls)),
+    path('api/', include(orden_router.urls)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
